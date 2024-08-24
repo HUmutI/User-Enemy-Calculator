@@ -3,7 +3,6 @@ package com.example.calculatorcopy
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -19,7 +18,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var buttons_original: List<View>
-    private lateinit var buttons: List<View>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +37,26 @@ class MainActivity : AppCompatActivity() {
             binding.minus, binding.multiply, binding.division,
             binding.openBracket, binding.closeBracket, binding.clearText
         )
+
+        val parentLayout = binding.buttonContainer
+        val childLayouts = mutableListOf<LinearLayout>()
+        val originalChildCount = mutableListOf<Int>()
+
+        for (i in 0 until parentLayout.childCount) {
+            val child = parentLayout.getChildAt(i)
+            if (child is LinearLayout) {
+                childLayouts.add(child)
+                originalChildCount.add(child.childCount)
+            }
+        }
+
+        val buttons = mutableListOf<View>()
+        for (layout in childLayouts) {
+            for (j in 0 until layout.childCount) {
+                buttons.add(layout.getChildAt(j))
+            }
+        }
+
 
         binding.no0.setOnClickListener {
             value_add("0", false)
@@ -116,7 +134,7 @@ class MainActivity : AppCompatActivity() {
         binding.back.setOnClickListener { back_function() }
         binding.equal.setOnClickListener { equal_function() }
 
-        binding.resetButton.setOnClickListener { resetFunction() }
+        binding.resetButton.setOnClickListener { resetFunction(childLayouts,originalChildCount,buttons) }
 
 
     }
@@ -151,73 +169,56 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun shuffleButtons() {
-        val parentLayout = binding.buttonContainer
-        val childLayouts = mutableListOf<LinearLayout>()
-        val originalChildCount = mutableListOf<Int>()
+        val parentLayout2 = binding.buttonContainer
+        val childLayouts2 = mutableListOf<LinearLayout>()
+        val originalChildCount2 = mutableListOf<Int>()
 
-        for (i in 0 until parentLayout.childCount) {
-            val child = parentLayout.getChildAt(i)
-            if (child is LinearLayout) {
-                childLayouts.add(child)
-                originalChildCount.add(child.childCount)
+        for (i in 0 until parentLayout2.childCount) {
+            val child2 = parentLayout2.getChildAt(i)
+            if (child2 is LinearLayout) {
+                childLayouts2.add(child2)
+                originalChildCount2.add(child2.childCount)
             }
         }
 
-        val buttons = mutableListOf<View>()
-        for (layout in childLayouts) {
+        val buttons2 = mutableListOf<View>()
+        for (layout in childLayouts2) {
             for (j in 0 until layout.childCount) {
-                buttons.add(layout.getChildAt(j))
+                buttons2.add(layout.getChildAt(j))
             }
         }
 
-        buttons.shuffle()
+        buttons2.shuffle()
 
-        for (layout in childLayouts) {
+        for (layout in childLayouts2) {
             layout.removeAllViews()
         }
 
         var buttonIndex = 0
-        for (i in childLayouts.indices) {
-            val layout = childLayouts[i]
-            val count = originalChildCount[i]
+        for (i in childLayouts2.indices) {
+            val layout = childLayouts2[i]
+            val count = originalChildCount2[i]
             for (j in 0 until count) {
-                layout.addView(buttons[buttonIndex])
+                layout.addView(buttons2[buttonIndex])
                 buttonIndex++
             }
         }
     }
 
-    fun resetFunction() {
-        val parentLayout = binding.buttonContainer
-        val childLayouts = mutableListOf<LinearLayout>()
-        val originalChildCount = mutableListOf<Int>()
-
-        for (i in 0 until parentLayout.childCount) {
-            val child = parentLayout.getChildAt(i)
-            if (child is LinearLayout) {
-                childLayouts.add(child)
-                originalChildCount.add(child.childCount)
-            }
-        }
-
-        val buttons = mutableListOf<View>()
-        for (layout in childLayouts) {
-            for (j in 0 until layout.childCount) {
-                buttons.add(layout.getChildAt(j))
-            }
-        }
-
-        for (layout in childLayouts) {
+    fun resetFunction(childLayouts2: MutableList<LinearLayout>, originalChildCount2: MutableList<Int>, buttons2: MutableList<View> ) {
+        binding.answerText.text = ""
+        binding.calculations.text = ""
+        for (layout in childLayouts2) {
             layout.removeAllViews()
         }
 
-        var buttonIndex = 0
-        for (i in childLayouts.indices) {
-            val layout = childLayouts[i]
-            val count = originalChildCount[i]
+        var buttonIndex2 = 0
+        for (i in childLayouts2.indices) {
+            val layout = childLayouts2[i]
+            val count = originalChildCount2[i]
             for (j in 0 until count) {
-                layout.addView(buttons[buttonIndex])
-                buttonIndex++
+                layout.addView(buttons2[buttonIndex2])
+                buttonIndex2++
             }
         }
     }
