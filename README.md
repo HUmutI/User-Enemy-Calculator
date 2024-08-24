@@ -9,4 +9,8 @@ I used **exp4j** to evaluate mathematical expressions.
 1) add *implementation("net.objecthunter:exp4j:0.4.8")* to the dependencies in build.gradle.kts (:app)
 2) add *import net.objecthunter.exp4j.ExpressionBuilder* to the MainActivity.kt
 
+## App Screenshot on Pixel 7 PRO
+
+![calculator_app_pixel_7_pro_ss](app/src/main/res/drawable/calculator_pixel7_p2.png)
+
 user-enemy-calculator with Kotlin by Hüseyin Umut Işık
